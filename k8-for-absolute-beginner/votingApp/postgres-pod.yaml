@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: postgres-app-pod
+  labels:
+    name: postgres-app-pod
+    app: demo-voting-app
+spec:
+  containers:
+  - name: postgres
+    image: postgres:9.4
+    ports:
+      - containerPort: 5432
+    env: #the worker and result pod used these credentials to access the DB. 
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        value: postgres
