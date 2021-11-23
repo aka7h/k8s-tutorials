@@ -18,9 +18,29 @@ kubectl -n argo port-forward deployment/argo-server 2746:2746
 
 Argo workflow is a container native workflow engine for orchestrating jobs in kubernetes
 
+### Argo Hello World
+
+``` yaml 
+> wf-hello-world.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+meta:
+    generateName: hello-world
+spec:
+    entrypoint: whalesay
+    templates:
+    -   name: whalesay
+        container:
+            image: docker/whalesay
+            command: [cowsay]
+            args: ['Hello, Welcome to Argo Workflow']
+
+
+```
+
 ### Create workflow
 ```
-kubectl -n argo create -f [YAMLFILE] 
+kubectl -n argo create -f .\wf-hello-world.yaml
 ```
 
 ### Template Definition & Invocators
