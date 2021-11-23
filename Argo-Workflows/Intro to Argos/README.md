@@ -18,6 +18,11 @@ kubectl -n argo port-forward deployment/argo-server 2746:2746
 
 Argo workflow is a container native workflow engine for orchestrating jobs in kubernetes
 
+### Create workflow
+```
+kubectl -n argo create -f [YAMLFILE] 
+```
+
 ### Template Definition & Invocators
 
 1. Containers
@@ -26,6 +31,9 @@ Argo workflow is a container native workflow engine for orchestrating jobs in ku
 4. Step/Steps
 5. DAG
 6. Suspend
+
+
+
 
 ### Container
 ``` yaml
