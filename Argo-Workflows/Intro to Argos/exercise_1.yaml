@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: wf-exercise
+spec:
+  entrypoint: exercise-1
+  templates:
+  - name: exercise-1
+    dag:
+      tasks:
+      - name: task-a
+        template: task-a-template
+      - name: task-b1
+        template: task-b-template
+        dependencies: [task-a]
+      - name: task-b2
+        template: task-b-template
+        dependencies: [task-b1]
+      - name: task-b3
+        template: task-b-template
+        dependencies: [task-b2]
+      - name: task-c
+        template: task-c-template
+        dependencies: [task-a]
+      - name: task-d
+        template: task-d-template
+        dependencies: [task-c,task-b3]
+      - name: task-a2
+        template: task-a-template
+        dependencies: [task-d]
+  - name: task-a-template
+    script:
+      image: python:3.8-slim
+      command: [python]
+      source: |
+        print("Task A executed successfully with script template")
+  - name: task-b-template
+    container:
+      image: python:3.8-slim
+      command: [echo, "Task B executed succcessfully with continer template"]
+  - name: task-d-template
+    suspend:
+      duration: "5s"
+  - name: task-c-template
+    resource:
+      action: create
+      manifest: |
+        apiVersion: argoproj.io/v1alpha1
+        kind: Workflow
+        metadata:
+          generateName: wf-resource-template
+        spec:
+          entrypoint: resource-template
+          templates:
+          - name: resource-template
+            script:
+              image: python:3.8-slim
+              command: [python]
+              source: |
+                print("Task C executed successfully with resource tempalate")
